@@ -12,11 +12,16 @@
  *     toArray(2, 3); //=> [2, 3]
  */
 
-import { UNDEF } from 'permanent';
-import notEquals from './notEquals';
+import _concat from './_internal/_concat';
+import compose from './compose';
+import filterBy from './filterBy';
+import isUndefined from './isUndefined';
+import not from './not';
 
-const notEqualsUndefined = notEquals(UNDEF);
+const notUndefined = compose(not, isUndefined);
+const removeUndefined = filterBy(notUndefined);
+const removeUndefinedFromClone = compose(removeUndefined, _concat);
 
-const toArray = (...args) => [].concat(...args).filter(val => notEqualsUndefined(val));
+const toArray = (...args) => removeUndefinedFromClone([], ...args);
 
 export default toArray;
